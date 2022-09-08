@@ -4,4 +4,4 @@ from user.views import *
 
 router = DefaultRouter(trailing_slash=False)
 
-router.register(r'user', UserPrivilegeViewset, basename="user")
+router.register(r'users', UserPrivilegeViewset, basename="users")
