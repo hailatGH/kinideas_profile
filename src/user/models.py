@@ -15,3 +15,16 @@ class UserPrivilegeModel(models.Model):
 
     def __str__(self):
         return '%s' % (self.user_id)
+
+class SubscribedUsersModel(models.Model):
+
+    class Meta:
+        ordering = ['user_id']
+
+    user_id = models.CharField(null=False, blank=False, max_length=1023, primary_key=True)
+    subscription_expiry_date = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user_id}"

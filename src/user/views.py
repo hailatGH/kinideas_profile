@@ -14,3 +14,9 @@ class UserPrivilegeViewset(viewsets.ModelViewSet):
     queryset = UserPrivilegeModel.objects.all()
     serializer_class = UserPrivilegeSerializer
     pagination_class = StandardResultsSetPagination
+
+class SubscribedUsersViewSet(viewsets.ModelViewSet):
+
+    queryset = SubscribedUsersModel.objects.all()
+    serializer_class = SubscribedUsersSerializer
+    pagination_class = StandardResultsSetPagination

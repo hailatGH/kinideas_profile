@@ -9,3 +9,9 @@ class UserPrivilegeSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserPrivilegeModel
         fields = '__all__'
+
+class SubscribedUsersSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SubscribedUsersModel
+        fields = '__all__'
