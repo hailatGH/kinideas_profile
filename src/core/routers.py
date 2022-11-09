@@ -6,3 +6,4 @@ router = DefaultRouter(trailing_slash=False)
 
 router.register(r'users', UserPrivilegeViewset, basename="users")
 router.register(r'subscribedUsers', SubscribedUsersViewSet, basename="subscribedUsers")
+router.register(r'noOfSkips', NoOfSkipsViewSet, basename="noOfSkips")

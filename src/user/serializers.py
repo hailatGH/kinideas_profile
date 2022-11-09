@@ -15,3 +15,9 @@ class SubscribedUsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubscribedUsersModel
         fields = '__all__'
+
+class NoOfSkipsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = NoOfSkipsModel
+        fields = '__all__'
