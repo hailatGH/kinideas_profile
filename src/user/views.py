@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from datetime import date
+from datetime import date, datetime, timedelta
 
 from user.serializers import *
 from .models import *
@@ -21,6 +21,22 @@ class SubscribedUsersViewSet(viewsets.ModelViewSet):
     queryset = SubscribedUsersModel.objects.all()
     serializer_class = SubscribedUsersSerializer
     pagination_class = StandardResultsSetPagination
+
+    def create(self, request, *args, **kwargs):
+        request.data._mutable = True
+        if request.data['subscription_type'].lower() == "monthly":
+            request.data['subscription_expiry_date'] = datetime.now() + timedelta(days=30)
+        elif request.data['subscription_type'].lower() == "yearly":
+            request.data['subscription_expiry_date'] = datetime.now() + timedelta(days=365)
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        request.data._mutable = True
+        if request.data['subscription_type'].lower() == "monthly":
+            request.data['subscription_expiry_date'] = datetime.now() + timedelta(days=30)
+        elif request.data['subscription_type'].lower() == "yearly":
+            request.data['subscription_expiry_date'] = datetime.now() + timedelta(days=365)
+        return super().update(request, *args, **kwargs)
 
 class NoOfSkipsViewSet(viewsets.ModelViewSet):
 

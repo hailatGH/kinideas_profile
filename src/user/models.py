@@ -22,7 +22,8 @@ class SubscribedUsersModel(models.Model):
         ordering = ['user_id']
 
     user_id = models.CharField(null=False, blank=False, max_length=1023, primary_key=True)
-    subscription_expiry_date = models.DateTimeField()
+    subscription_type = models.CharField(null=False, blank=False, max_length=1023)
+    subscription_expiry_date = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -5,8 +5,8 @@ from django.db import migrations
 
 
 def createsuperuser(apps, schema_editor):
-    music_admin_password = "playground"
-    User.objects.create_superuser("admin", password=music_admin_password)
+    kinideas_profile_admin_password = "playground"
+    User.objects.create_superuser("admin", password=kinideas_profile_admin_password)
 
 
 class Migration(migrations.Migration):
