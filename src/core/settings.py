@@ -1,64 +1,37 @@
-import io, os, environ, google.auth
-from google.cloud import secretmanager
-from urllib.parse import urlparse
-
+import os
+import django
+from django.utils.encoding import force_str
 from .basesettings import *
+django.utils.encoding.force_text = force_str
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ALLOWED_HOSTS = [
+    "kinideas-profile.calmgrass-743c6f7f.francecentral.azurecontainerapps.io"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://kinideas-profile.calmgrass-743c6f7f.francecentral.azurecontainerapps.io/*"]
 
-DEBUG = True
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': "profile_database",
+        'USER': "zemadatabaseadmin",
+        'PASSWORD': "StrongP@ssword",
+        'HOST': "zema-postgresql-v100.postgres.database.azure.com",
+        'PORT': '5432',
+        'OPTIONS': {'sslmode': 'disable'}
+    }
+}
 
-env = environ.Env(
-    SECRET_KEY=(str, os.getenv("SECRET_KEY")),
-    DATABASE_URL=(str, os.getenv("DATABASE_URL")),
-    GS_BUCKET_NAME=(str, os.getenv("GS_BUCKET_NAME")),
-)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, '/static/'),
+]
+AZURE_ACCOUNT_NAME = 'zemastroragev100'
+AZURE_ACCOUNT_KEY = 'AFsY2hZVbyYBKisEkRL+toNNJ7yBOzoJ/cruOxurFHnU84vE+Cmloq9S2ZkCxYaxrM5QemPsUiX5+ASt4WEg8w=='
+AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+AZURE_LOCATION = 'zemacontainer'
+AZURE_CONTAINER = 'zemacontainer'
 
-try:
-    _, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
-except google.auth.exceptions.DefaultCredentialsError:
-    pass
+STATIC_LOCATION = 'static'
+STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
 
-if os.getenv("PYTHON_ENV") == "dev":
-    DEBUG = True
-
-elif os.getenv("GOOGLE_CLOUD_PROJECT", None):
-    project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
-
-    client = secretmanager.SecretManagerServiceClient()
-    settings_name = os.getenv("SETTINGS_NAME", "kinideas_profile_settings")
-    name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
-    payload = client.access_secret_version(name=name).payload.data.decode(
-        "UTF-8"
-    )
-
-    env.read_env(io.StringIO(payload))
-else:
-    raise Exception(
-        "No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found."
-    )
-
-SECRET_KEY = env("SECRET_KEY")
-
-KINIDEAS_PROFILE_URL = env("KINIDEAS_PROFILE_URL", default=None)
-
-if KINIDEAS_PROFILE_URL:
-    ALLOWED_HOSTS = [urlparse(KINIDEAS_PROFILE_URL).netloc]
-    CSRF_TRUSTED_ORIGINS = [KINIDEAS_PROFILE_URL]
-else:
-    ALLOWED_HOSTS = ["*"]
-
-DATABASES = {"default": env.db()}
-
-if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
-    DATABASES["default"]["HOST"] = "cloudsql-proxy"
-    DATABASES["default"]["PORT"] = 5432
-
-if "core" not in INSTALLED_APPS:
-    INSTALLED_APPS += ["core"]
-
-GS_BUCKET_NAME = env("GS_BUCKET_NAME")
-STATICFILES_DIRS = []
-DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
-STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
-GS_DEFAULT_ACL = "publicRead"
+STATICFILES_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+DEFAULT_FILE_STORAGE = 'core.custom_storage.AzureMediaStorage'
