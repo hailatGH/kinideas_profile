@@ -1,4 +1,7 @@
-import io, os, environ, google.auth
+import io
+import os
+import environ
+import google.auth
 from google.cloud import secretmanager
 from urllib.parse import urlparse
 
@@ -26,7 +29,7 @@ elif os.getenv("GOOGLE_CLOUD_PROJECT", None):
     project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
 
     client = secretmanager.SecretManagerServiceClient()
-    settings_name = os.getenv("SETTINGS_NAME", "kinideas_profile_settings")
+    settings_name = os.getenv("SETTINGS_NAME", "kinideas_profile_settings_dev")
     name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
     payload = client.access_secret_version(name=name).payload.data.decode(
         "UTF-8"
