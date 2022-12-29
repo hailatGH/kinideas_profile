@@ -29,5 +29,5 @@ class NoOfSkipsSerializer(serializers.ModelSerializer):
 class FeatureReleaseSerializer(serializers.ModelSerializer):
 
     class Meta:
-        models = FeatureRelease
+        model = FeatureRelease
         fields = '__all__'
