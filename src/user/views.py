@@ -85,3 +85,9 @@ class NoOfSkipsViewSet(viewsets.ModelViewSet):
         userData.update(noOfSkips=noOfSkips)
         userData = self.queryset.filter(user_id=userId).values()
         return Response(userData)
+
+
+class FeatureReleaseViewSet(viewsets.ModelViewSet):
+
+    queryset = FeatureRelease.objects.all()
+    serializer_class = FeatureReleaseSerializer
